@@ -1,0 +1,107 @@
+
+.mutate:hover {
+  font-weight: 600;
+}
+
+.mutateColor:hover {
+  color: black;
+}
+
+.hinweisbox {
+  padding: 10px;
+  border: 1px solid red;
+  margin: 0px 0px 10px 0px;
+  background-color: #eeeeee;
+}
+
+.dropdown-toggle:empty::after {
+  display: none;
+}
+
+.menuborderbottom {
+  border-bottom: 1px solid #ddd;
+}
+
+.menubold:hover {
+  font-weight: 600;
+}
+
+.artisticonadmin {
+  margin-top: 1px;
+  background-color: #92bebe;
+  border-radius: 50%;
+  padding: 3px;
+  color: #fff;
+  font-size: 11px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  position: absolute;
+  bottom: 0px;
+  top: -1px !important;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5%;
+  background: #cccccc;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.opentasks {
+  margin: -10px 20px 0px 20px;
+}
+
+.opentasksbadge {
+  border-radius: 50%;
+  right: 2px;
+  position: relative;
+  top: -8px;
+  font-size: 11px;
+  padding: 3px 6px;
+  color: #fff;
+  background: #f28d35;
+}
+
+.verwaltung_icon_admin {
+  padding: 5px;
+  position: relative;
+  top: -7px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 16px;
+  margin: 0px;
+}
+
+.iconcircle-prod-menu {
+  font-size: 12px;
+  background-color: #ffb64d;
+  color: #fff;
+  padding: 3px;
+  border-radius: 50%;
+  position: relative;
+  top: -1px;
+}
+
+.iconcircle-spiel-menu {
+  font-size: 12px;
+  background-color: #4c4c4c;
+  color: #fff;
+  padding: 3px;
+  border-radius: 50%;
+  position: relative;
+  top: -1px;
+}
+
+.iconcircle-werk-menu {
+  font-size: 12px;
+  background-color: #ab7967;
+  color: #fff;
+  padding: 3px;
+  border-radius: 50%;
+  position: relative;
+  top: -1px;
+}

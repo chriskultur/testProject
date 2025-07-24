@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./target/classes/static/app",
+    "types" : ["node"],
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "files": ["src/main/webapp/main.ts", "src/main/webapp/polyfills.ts"],
+  "include": ["src/main/webapp/**/*.d.ts"]
+}
