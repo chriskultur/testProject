@@ -165,6 +165,7 @@ export class TruncatePipe implements PipeTransform {
     SearchProductionElasticComponent,
   ],
   exports: [
+    RouterModule,
     MessageTemplateComponent,
     PersonlicheNachrichtComponent,
     SearchProductionElasticComponent,
