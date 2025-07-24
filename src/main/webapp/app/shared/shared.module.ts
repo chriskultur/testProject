@@ -72,45 +72,22 @@ import {
   SearchBetriebeElasticComponent
 } from "./child_components/search-betriebe-elastic/search-betriebe-elastic.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
-import {ImageUploadComponent} from "./child_components/image-upload/image-upload.component";
 import {ImageCropperModule} from "ngx-image-cropper";
-import {CardComponent} from "./child_components/card/card.component";
 import {FavoriteComponent} from "./child_components/favorite/favorite.component";
 import {ShowOnlyUnusedTagSuggestionsFilter} from "./pipe/show-only-unused-tag-suggestions";
 import {QuillEditComponent} from "./child_components/quill-edit/quill-edit.component";
 import {QuillModule} from "ngx-quill";
-import {
-  ProductMediaDocumentComponent
-} from "./child_components/product-media-document/product-media-document.component";
-import {ProductMediaVideoComponent} from "./child_components/product-media-video/product-media-video.component";
-import {ProductMediaComponent} from "./child_components/product-media/product-media.component";
-import {
-  InvitePersonMitarbeiterComponent
-} from "./child_components/invite-person-miarbeiter/invite-person-mitarbeiter.component";
 import {NgxGalleryModule} from "@hyahfoufi/ngx-gallery";
 import {MessageTemplateComponent} from "./child_components/message-template/message-template.component";
 import {SharedImagesComponent} from "./child_components/shared-images/shared-images.component";
 import {SafePipe} from "./pipe/unsafeUrlToSafe";
-import {CreateInviteCompanyComponent} from "./child_components/create-invite-company/create-invite-company.component";
-import {ProductMediaViewComponent} from "./child_components/product-media-view/product-media-view.component";
-import {EditMitwirkendeComponent} from "./child_components/edit-mitwirkende/edit-mitwirkende.component";
-import {CreateMitwirkendeComponent} from "./child_components/create-mitwirkende/create-mitwirkende.component";
-import {InvitePersonAllTypeComponent} from "./child_components/invite-person-AllType/invite-person-AllType.component";
 import {TagInputModule} from "ngx-chips";
-import {AutoCompleteModule} from "@syncfusion/ej2-angular-dropdowns";
-import {CreateSpielComponent} from "./child_components/create-spiel/create-spiel.component";
-import {MediaGalleryComponent} from "./child_components/media-gallery/media-gallery.component";
-import {MediaVideoComponent} from "./child_components/media-video/media-video.component";
+
 import {PersonlicheNachrichtComponent} from "./child_components/personliche-nachricht/personliche-nachricht.component";
 import {
   SearchProductionElasticComponent
 } from "./child_components/search-production-elastic/search-production-elastic.component";
-import {QuillEditContractComponent} from "./child_components/quill-edit-contract/quill-edit-contract.component";
-import {ProductMediaMp3Component} from "./child_components/product-media-mp3/product-media-mp3.component";
-import {ProductMediaMp3ViewComponent} from "./child_components/product-media-mp3-view/product-media-mp3-view.component";
 import {OltUiSwitchModule} from "@outerlimitstech/ngx-ui-switch";
-import {ContractTableComponent} from "../pages/contract-table/contract-table.component";
-import {TabContainerComponent} from "../pages/tab-container/tab-container.component";
 
 @Pipe({
   name: 'truncate',
@@ -143,7 +120,6 @@ export class TruncatePipe implements PipeTransform {
     }),
     RouterModule,
     TagInputModule,
-    AutoCompleteModule,
     OltUiSwitchModule.forRoot({
       size: 'small',
       color: 'rgb(0, 189, 99)',
@@ -155,14 +131,8 @@ export class TruncatePipe implements PipeTransform {
     })
   ],
   declarations: [
-    ContractTableComponent,
-    TabContainerComponent,
-    ProductMediaComponent,
     SharedImagesComponent,
     MessageTemplateComponent,
-    ProductMediaVideoComponent,
-    ProductMediaDocumentComponent,
-    CardComponent,
     FeedbackComponent,
     NotificationComponent,
     SpinnerComponent,
@@ -187,57 +157,24 @@ export class TruncatePipe implements PipeTransform {
     CreateCompanyComponent,
     SearchBetriebeElasticComponent,
     BreadcrumbsComponent,
-    ImageUploadComponent,
     FavoriteComponent,
     ShowOnlyUnusedTagSuggestionsFilter,
     QuillEditComponent,
-    ProductMediaComponent,
-    InvitePersonMitarbeiterComponent,
-    CreateInviteCompanyComponent,
-    ProductMediaViewComponent,
-    EditMitwirkendeComponent,
-    CreateMitwirkendeComponent,
-    InvitePersonAllTypeComponent,
-    CreateSpielComponent,
-    MediaGalleryComponent,
-    MediaVideoComponent,
     MessageTemplateComponent,
     PersonlicheNachrichtComponent,
-    QuillEditContractComponent,
     SearchProductionElasticComponent,
-    ProductMediaMp3Component,
-    ProductMediaMp3ViewComponent
   ],
   exports: [
-    TabContainerComponent,
-    ContractTableComponent,
-    ProductMediaMp3ViewComponent,
-    ProductMediaMp3Component,
-    MediaGalleryComponent,
-    MediaVideoComponent,
     MessageTemplateComponent,
     PersonlicheNachrichtComponent,
-    QuillEditContractComponent,
     SearchProductionElasticComponent,
-    CreateSpielComponent,
     OltUiSwitchModule,
     TruncatePipe,
-    InvitePersonAllTypeComponent,
-    EditMitwirkendeComponent,
-    CreateMitwirkendeComponent,
-    ProductMediaViewComponent,
-    CreateInviteCompanyComponent,
     SharedImagesComponent,
     MessageTemplateComponent,
-    ProductMediaVideoComponent,
-    ProductMediaComponent,
-    InvitePersonMitarbeiterComponent,
-    ProductMediaDocumentComponent,
     QuillEditComponent,
     ShowOnlyUnusedTagSuggestionsFilter,
-    CardComponent,
     FavoriteComponent,
-    ImageUploadComponent,
     BreadcrumbsComponent,
     SearchBetriebeElasticComponent,
     CreateCompanyComponent,

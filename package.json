@@ -161,7 +161,6 @@
     "prettier-plugin-java": "1.6.2",
     "prettier-plugin-packagejson": "2.2.18",
     "rimraf": "3.0.2",
-    "swagger-ui-dist": "3.25.1",
     "ts-jest": "29.1.2",
     "typescript": "5.1.6",
     "wait-on": "6.0.1",

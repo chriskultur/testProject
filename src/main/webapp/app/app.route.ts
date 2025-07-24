@@ -17,10 +17,10 @@ export const AppRoutes: Routes = [
         redirectTo: 'homepage',
         pathMatch: 'full',
       },
-      {
-        path: 'homepage',
-        loadChildren: () => import('./pages/homepage/homepage.module').then(mod => mod.HomepageModule),
-      },
+      // {
+      //   path: 'homepage',
+      //   loadChildren: () => import('./pages/homepage/homepage.module').then(mod => mod.HomepageModule),
+      // },
     ],
   }
 ];

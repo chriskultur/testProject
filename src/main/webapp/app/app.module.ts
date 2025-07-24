@@ -16,7 +16,6 @@ import {SharedModule} from 'app/shared/shared.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {httpInterceptorProviders} from './core/interceptor';
 import {AppComponent} from "./app.component";
-import {HomepageModule} from "./pages/homepage/homepage.module";
 import {RouterModule} from "@angular/router";
 import {AuthComponent} from "./pages/auth/auth.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -25,7 +24,6 @@ import {AdminComponent} from "./pages/admin/admin.component";
 import {GlobalVariableService} from "./shared/global-variable/globalVariable.service";
 import {PdfViewerModule} from "ng2-pdf-viewer";
 import {FormsModule} from "@angular/forms";
-import {NgxTextDiffModule} from "@stelmukhov/ngx-text-diff";
 
 
 @NgModule({
@@ -37,7 +35,6 @@ import {NgxTextDiffModule} from "@stelmukhov/ngx-text-diff";
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
-    NgxTextDiffModule,
     NgxWebstorageModule.forRoot({ prefix: 'app', separator: '-', caseSensitive: true }),
     PdfViewerModule,
     SharedModule,
@@ -57,7 +54,6 @@ export class AppModule {
   constructor(applicationConfigService: ApplicationConfigService, iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig) {
     applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
-    iconLibrary.addIcons(...fontAwesomeIcons);
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
   }
 }

@@ -1,24 +1,10 @@
 @import "../../../../node_modules/quill/dist/quill.snow.css";
 @import "../../../../node_modules/quill/dist/quill.bubble.css";
 @import "../../../../node_modules/@outerlimitstech/ngx-ui-switch/ui-switch.component.scss";
-@import '../../../../node_modules/@syncfusion/ej2-base/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-buttons/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-calendars/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-dropdowns/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-inputs/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-lists/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-popups/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-navigations/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-angular-schedule/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-angular-documenteditor/styles/bootstrap5.css';
-@import '../../../../node_modules/@syncfusion/ej2-angular-inplace-editor/styles/bootstrap5.css';
 
 @import '../../../../node_modules/ngx-sharebuttons/themes/modern.scss';
 
 @import "../../../../node_modules/plyr/dist/plyr.css";
-@import '../content/css/themify-icons.scss';
 @import '../content/icon/icofont/css/icofont.min.scss';
 
 
@@ -1197,9 +1183,9 @@ a.mytooltip {
   }
 }
 
-.jstree-default > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url('./../content/pages/treeview/throbber.gif') center center no-repeat;
-}
+//.jstree-default > .jstree-container-ul .jstree-loading > .jstree-ocl {
+//  background: url('./../content/pages/treeview/throbber.gif') center center no-repeat;
+//}
 
 /**====== Tree-view css end ======**/
 /**  =====================
