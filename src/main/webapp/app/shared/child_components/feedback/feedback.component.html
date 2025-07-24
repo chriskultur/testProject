@@ -1,0 +1,711 @@
+<div style="position: fixed; right: 1px; top: 50%; z-index: 5000" [class.iconinfront]="shownotes">
+  <div (click)="openNotes(); refreschData()" class="feedback pointer" [class.iconinfront-bg]="shownotes">
+    <div class="ribbon"><span>Neu</span></div>
+    <i class="icofont-notepad" ngbTooltip="Notiz machen" placement="left" container="body"></i>
+  </div>
+  <div (click)="open(feedBackmodal); refreschData()" class="feedback pointer">
+    <i class="icofont-ui-text-chat" ngbTooltip="Feedback geben" placement="left" container="body"></i>
+  </div>
+  <div style="margin-top: 3px" [routerLink]="'/faq/'" class="feedback pointer">
+    <i class="icofont-question-circle" ngbTooltip="FAQs anzeigen" placement="left" container="body"></i>
+  </div>
+  <div style="margin-top: 3px" [routerLink]="'/tutorials/'" class="feedback pointer">
+    <i class="icofont-ui-video-chat" ngbTooltip="Tutorials anschauen" placement="left" container="body"></i>
+  </div>
+</div>
+
+<div *ngIf="shownotes">
+  <div class="notes-overlay"></div>
+  <div class="noteoverlay">
+    <div class="noteheader">
+      <div class="modal-header">
+        <div class="modal-title">
+          Notizen von <span class="f-w-600">{{ aktivBetrieb.betriebsname }}</span>
+        </div>
+        <button
+          type="button"
+          class="close"
+          style="cursor: pointer; border: none; font-size: 24px"
+          aria-label="Close"
+          (click)="openNotes(); sendShowNotes(); this.selectedFilter = { beschreibung: 'All', count: 0, id: 0 }"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="newnote p-15">
+      <input
+        type="text"
+        name="notetitle12"
+        [(ngModel)]="notes.titel"
+        class="form-control"
+        (click)="showResultList = false; displayAktiveBetProd = false"
+        placeholder="Titel (optional)"
+      />
+      <div class="row">
+        <div class="col-lg-8">
+          <div style="margin-top: 10px" class="quillheight-note" (click)="showResultList = false; displayAktiveBetProd = false">
+            <app-quill-edit
+              [beschreibung]="this.notes.beschreibung"
+              (changed)="onQuill($event)"
+              [style]="{ height: '300px', width: '100%', display: 'inline-grid' }"
+            >
+            </app-quill-edit>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div style="float: right; margin-top: 10px; width: 100%">
+            <div>
+              <input
+                (click)="displayAktiveBetProd = !displayAktiveBetProd"
+                (keyup)="keyUp.next($event)"
+                [(ngModel)]="searchString"
+                class="form-control-feedback form-control subject e-field"
+                data-name="SubjectEdit"
+                id="SubjectEditModal1"
+                name="SubjectEdit"
+                placeholder="Produktion, Spielstätte, Werk"
+                style="width: 100%"
+                type="text"
+              />
+              <span (click)="produktRemove(); showResultList = false; displayAktiveBetProd = false" class="textlink"
+                ><i class="icofont-minus-circle m-r-10" style="position: absolute; right: 10px; top: 25px"></i>
+              </span>
+            </div>
+            <div
+              *ngIf="displayAktiveBetProd && (searchString == '' || searchString == null)"
+              class="col-lg-12"
+              style="position: absolute; background: #fff; z-index: 10; width: 100%; right: 0px"
+            >
+              <div
+                *ngIf="aktiveBetAllProduct.length != 0"
+                class="dropdown-content"
+                style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll"
+              >
+                <ng-container *ngFor="let result of aktiveBetAllProduct; let i = index">
+                  <div *ngIf="result.produktion_type == 2 && result.status == 'O'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="result.produktion_type == 2 && result.angebotsbezeichnung != null && result.angebotsbezeichnung != ''"
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result?.angebotsbezeichnung }}
+                      </div>
+                      <div (click)="produktAndern(result, 'prod', 'own')" class="pointer f-w-600 p-l-10">{{ result.produkt_name }}</div>
+                    </div>
+                  </div>
+                  <div *ngIf="result.produktion_type == 1 && result.status == 'O'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-werk icofont-paper"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="result.produktion_type == 1 && result.angebotsbezeichnung != null && result.angebotsbezeichnung != ''"
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result?.angebotsbezeichnung }}
+                      </div>
+                      <div (click)="produktAndern(result, 'werk', 'own')" class="pointer f-w-600 p-l-10">{{ result.produkt_name }}</div>
+                    </div>
+                  </div>
+                  <div *ngIf="result.produktion_type == 0 && result.status == 'O' && result.recht_edit == 'J'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndern(result, 'spiel', 'own')" class="pointer f-w-600 p-l-10">{{ result.produkt_name }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div
+                *ngIf="aktiveBetAllProduct.length == 0"
+                class="dropdown-content"
+                style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll"
+              >
+                <ng-container *ngFor="let result of favoriteProdSpielList; let i = index">
+                  <div *ngIf="result.favorit_art == 2" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div (click)="produktAndern(result, 'prod', 'fav')" class="pointer f-w-600 p-l-10">
+                        {{ result.favorit_objekt_bezeichnung }}
+                      </div>
+                    </div>
+                    <div class="p-l-10" style="font-size: 10px">{{ result.betrieb_name }}</div>
+                  </div>
+                  <div *ngIf="result.favorit_art == 3" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndern(result, 'spiel', 'fav')" class="pointer f-w-600 p-l-10">{{
+                        result.favorit_objekt_bezeichnung
+                      }}</span>
+                    </div>
+                    <div class="p-l-10" style="font-size: 10px">{{ result.betrieb_name }}</div>
+                  </div>
+                  <div *ngIf="result.favorit_art == 1" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-werk icofont-paper"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndern(result, 'werk', 'fav')" class="pointer f-w-600 p-l-10">{{
+                        result.favorit_objekt_bezeichnung
+                      }}</span>
+                    </div>
+                    <div class="p-l-10" style="font-size: 10px">{{ result.betrieb_name }}</div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div
+              *ngIf="resultFound.length != 0 && showResultList && displayProdSearchResult && !(searchString == '' || searchString == null)"
+              class="col-lg-12"
+              style="position: absolute; background: #fff; z-index: 10; width: 100%; right: 0px"
+            >
+              <div class="dropdown-content" style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll">
+                <ng-container *ngFor="let result of resultFound; let i = index">
+                  <div *ngIf="result._index == 'prod'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="
+                          result._source.interne_bezeichnung_der_produkts != null && result._source.interne_bezeichnung_der_produkts != ''
+                        "
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result._source.interne_bezeichnung_der_produkts }}
+                      </div>
+                      <div (click)="produktAndern(result._source, 'prod', 'elastic')" class="pointer f-w-600 p-l-10 d-inline-block">
+                        {{ result._source?.prodWerkSearchTeilDTO.titel }}
+                        <span>
+                          von
+                          <em
+                            ><span class="betriebinsearch">{{ result._source?.betriebsname }} </span>
+                          </em></span
+                        >
+                      </div>
+                      <div *ngIf="result.dateConflict != undefined && !result.dateConflict" class="d-inline-block">
+                        <i
+                          class="icofont-ban text-danger"
+                          ngbTooltip="Ihr ausgewähltes Datum liegt nicht im angegebenen Tourneezeitraum dieser Produktion"
+                          placement="bottom"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="result._index == 'spiel'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndern(result._source, 'spiel', 'elastic')" class="pointer f-w-600 p-l-10">{{
+                        result._source?.interne_bezeichnung_der_produkts
+                      }}</span>
+                      <div class="p-l-10" style="font-size: 10px">
+                        <span>{{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].poststrasse }}</span>
+                        <span>{{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].postplz }}</span>
+                        <span> {{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].liste_land_glieds_bezeichnung }}</span>
+                        •
+                        <span class="f-w-600">
+                          {{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].liste_lands_bezeichnung }}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="result._index == 'werk'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-werk icofont-paper"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndern(result._source, 'werk', 'elastic')" class="pointer f-w-600 p-l-10">{{
+                        result._source?.titel
+                      }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="m-t-10">
+              <app-search-betriebe-elastic
+                (betriebFoundInCrowd)="resultNotFoundInCrowd($event)"
+                (inputString)="inputStringReset($event)"
+                [includeKunstler]="true"
+                (blurInput)="hideResultBox($event, null, null)"
+                (clearField)="betriebRemove($event)"
+                [classCheck]="false"
+                (notFound)="resultnotFound($event)"
+                (selectedBetriebe)="selectedItemBetrieb($event)"
+                [requiredValidator]="true"
+                [AktivBetId]="aktivBetrieb.betriebsId"
+                [displayAktivBet]="false"
+                [newBetCreatedChangeClassOFInput]="newBetCreatedForRecht"
+                [notifier]="subjectToClearInputValueSearchBet"
+                [liland]="liland"
+                [searchStringForDisplay]="betriebsname"
+              >
+              </app-search-betriebe-elastic>
+              <div *ngIf="betFoundInCrowdList">
+                <span class="m-t-10 m-b-10"
+                  >Hinweis: Dieser Betrieb ist noch nicht freigegeben und kann erst für weitere Prozesse verwendet werden, sobald er
+                  bestätigt wurde.</span
+                ><br />
+              </div>
+              <select [(ngModel)]="notes.mitarbeiterId" class="custom-select-notes m-t-15">
+                <option value="null" [attr.selected]="notes.mitarbeiterId == null ? true : null">Mitarbeiter zuordnen</option>
+                <option *ngFor="let arbeiter of mitarbeiter; let l = index" [value]="arbeiter.id" id="worker{{ l }}">
+                  {{ arbeiter?.titel }}
+                  {{ arbeiter?.vorname }}
+                  {{ arbeiter?.nachname }}
+                </option>
+              </select>
+              <div>
+                <button class="btn btn-primary btn-block m-t-15" (click)="saveNotes()">Notiz speichern</button>
+              </div>
+            </div>
+            <!-- <div *ngFor="let arbeiter of mitarbeiter; let l = index" class="col m-b-30"
+                            style="min-width: 250px;">
+                            <div class="card pointer" (click)="clickLeiterShow(l);">
+
+                                <div class="card-body">
+                                    <span class="card-text"> {{arbeiter?.titel}}
+                                        {{arbeiter?.vorname}}
+                                        {{arbeiter?.nachname}}
+                                    </span>
+                                    <div class="text-muted">Leitung
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="allnotes p-15" (click)="showResultList = false; displayAktiveBetProd = false">
+      <div style="padding: 15px 5px; background: #ddd">
+        <div class="row">
+          <div class="col">
+            <div
+              class="filterselected m-l-5"
+              *ngIf="selectedFilter.beschreibung == 'All'"
+              (click)="filterWithTag({ beschreibung: 'All', count: 0 })"
+            >
+              Alle
+            </div>
+            <div
+              class="filternotselected m-l-5"
+              *ngIf="selectedFilter.beschreibung != 'All'"
+              (click)="filterWithTag({ beschreibung: 'All', count: 0 })"
+            >
+              Alle
+            </div>
+            <div class="mitwirfilter" *ngFor="let tag of filtertags" (click)="filterWithTag(tag)">
+              <div class="filterselected" *ngIf="selectedFilter.id == tag.id">{{ tag.beschreibung }} ({{ tag.count }})</div>
+              <div class="filternotselected" *ngIf="selectedFilter.id != tag.id">{{ tag.beschreibung }} ({{ tag.count }})</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-t-15">
+        <div class="row" data-masonry='{"percentPosition": true }'>
+          <ng-container *ngFor="let note of betnotes; let i = index">
+            <div class="col-sm-4 col-md-3" *ngIf="!note.hide">
+              <div class="card">
+                <div class="card-body">
+                  <div class="notetitle pointer" (click)="loadEditNoteObject(note); this.editnote = true; showResultListEdit = false">
+                    <div>{{ note.titel }}</div>
+                  </div>
+                  <div class="notetext" (click)="loadEditNoteObject(note); this.editnote = true; showResultListEdit = false">
+                    <div [innerHTML]="note.beschreibung"></div>
+                  </div>
+                  <div
+                    *ngIf="
+                      (note.produktname != null && note.produktname != '') || note.partnerBetriebId != null || note.mitarbeiterId != null
+                    "
+                    class="noteinfo"
+                    style="height: auto"
+                  >
+                    <div *ngIf="note.produktname != null && note.produktname != ''" class="p-b-5">
+                      <i *ngIf="note.prodProdId != null" class="icofont-star-alt-1" ngbTooltip="Produktion"></i>
+                      <i *ngIf="note.prodSpielId != null" class="icofont-flag" ngbTooltip="Spielstätte"></i>
+                      <i *ngIf="note.prodWerkId != null" class="icofont-paper" ngbTooltip="Werk"></i>
+                      <span class="">{{ note.produktname }}</span>
+                    </div>
+                    <div class="m-b-15" *ngIf="note.partnerBetriebId != null">
+                      <i class="icofont-company"></i> <span class="">{{ note.partnerBetriebsname }}</span>
+                    </div>
+                    <div class="m-b-15" *ngIf="note.mitarbeiterId != null">
+                      <i class="icofont-ui-user"></i> <span class="">{{ note.mitarbeiterName }}</span>
+                    </div>
+                  </div>
+                  <div class="f-11 m-t-10" class="noteedited">
+                    <span style="position: absolute">
+                      <div ngbDropdown placement="right-top" style="right: 5px; bottom: 0px">
+                        <i class="f-16 icofont-options pointer" ngbDropdownToggle></i>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                          <button ngbDropdownItem (click)="loadEditNoteObject(note); this.editnote = true">Notiz bearbeiten</button>
+                          <button ngbDropdownItem (click)="deleteNotes(note.id, i)">Notiz löschen</button>
+                          <!-- <button ngbDropdownItem>Kopie erstellen</button> -->
+                        </div>
+                      </div>
+                    </span>
+                    <span class="p-l-20 f-11"
+                      >Bearbeitet von
+                      <span class="ahreflink" [routerLink]="['/user/userprofile_view', note.bpId]" (click)="openNotes()">{{
+                        note.benutzerName
+                      }}</span>
+                      am {{ note.datum | date }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+
+<ng-template #feedBackmodal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Sagen Sie uns Ihre Meinung</h5>
+    <button type="button" class="close" style="cursor: pointer" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="feedbackForm" role="form" novalidate #feedbackForm="ngForm">
+    <div class="modal-body">
+      <div class="row">
+        <div class="form-group col-lg-6">
+          <label>Vorname*</label>
+          <input
+            type="text"
+            name="vorname"
+            class="form-control"
+            #vorname="ngModel"
+            placeholder="{{ aktiveUser?.vorname }}"
+            [(ngModel)]="aktiveUser.firstName"
+            vorname
+            required
+            disabled
+          />
+          <div *ngIf="vorname.touched && !vorname.valid" class="alert alert-danger">
+            <div *ngIf="vorname.errors.required">Bitte geben Sie einen Vornamen an</div>
+          </div>
+        </div>
+        <div class="form-group col-lg-6">
+          <label>Nachname*</label>
+          <input
+            type="text"
+            name="nachname"
+            class="form-control"
+            #nachname="ngModel"
+            placeholder="{{ aktiveUser?.nachname }}"
+            [(ngModel)]="aktiveUser.lastName"
+            nachname
+            required
+            disabled
+          />
+          <div *ngIf="nachname.touched && !nachname.valid" class="alert alert-danger">
+            <div *ngIf="nachname.errors.required">Bitte geben Sie einen Nachnamen an</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label>Ihre E-Mail-Adresse</label>
+          <input type="text" class="form-control" placeholder="E-Mail" name="mail" [(ngModel)]="aktiveUser.email" required disabled />
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-lg-12">
+          <label>Ihre persönliche Nachricht</label>
+          <textarea
+            class="form-control rounded-0"
+            name="deletearea"
+            placeholder="Ihr Feedback"
+            rows="10"
+            [(ngModel)]="txtmsg"
+            required
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Abbrechen</button>
+      <button *ngIf="feedbackForm.form.valid" type="submit" class="btn btn-primary" (click)="c('Close click'); sendMail()">
+        Feedback absenden
+      </button>
+      <button *ngIf="!feedbackForm.form.valid" type="submit" class="btn disabled2" ngbTooltip="Bitte füllen Sie alle Pflichtfelder aus">
+        Feedback absenden
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<div *ngIf="editnote">
+  <div class="editnote-overlay"></div>
+  <div class="editnotemodal">
+    <div class="noteheader">
+      <div class="modal-header">
+        <div class="modal-title">Notiz bearbeiten</div>
+        <button
+          type="button"
+          class="close"
+          style="cursor: pointer; border: none"
+          aria-label="Close"
+          (click)="closeEditObject(); this.subjectToClearInputValueSearchBetEdit.next('TEST'); displayAktiveBetProdEdit = false"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="newnote p-15">
+      <input
+        type="text"
+        name="notetitle2222"
+        class="form-control"
+        placeholder="Titel (optional)"
+        [(ngModel)]="this.editNoteObject.titel"
+        (click)="showResultListEdit = false; displayAktiveBetProdEdit = false"
+      />
+      <div class="row">
+        <div class="col-lg-8">
+          <div style="margin-bottom: 50px; margin-top: 10px" class="quillheight-note" (click)="showResultListEdit = false; displayAktiveBetProdEdit = false">
+            <app-quill-edit [beschreibung]="this.editNoteObject.beschreibung" class="feedbackquill" (changed)="onQuillEdit($event)" [style]="{ height: '300px', width: '100%', display: 'inline-grid' }">
+            </app-quill-edit>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div style="float: right; margin-top: 10px; width: 100%">
+            <div>
+              <input
+                (click)="displayAktiveBetProdEdit = !displayAktiveBetProdEdit"
+                (keyup)="keyUp.next($event)"
+                [(ngModel)]="searchStringEdit"
+                class="form-control subject e-field"
+                data-name="SubjectEdit25"
+                id="SubjectEditModal25"
+                name="SubjectEdit25"
+                placeholder="Produktion, Spielstätte, Werk"
+                style="width: 100%"
+                type="text"
+              />
+              <span (click)="showResultListEdit = false; displayAktiveBetProdEdit = false; produktRemoveEdit()" class="textlink"
+                ><i class="icofont-minus-circle m-r-10" style="position: absolute; right: 10px; top: 25px"></i
+              ></span>
+            </div>
+            <div
+              *ngIf="displayAktiveBetProdEdit && (searchStringEdit == '' || searchStringEdit == null)"
+              class="col-lg-12"
+              style="position: absolute; background: #fff; z-index: 10; width: 100%; right: 0px"
+            >
+              <div
+                *ngIf="aktiveBetAllProduct.length != 0"
+                class="dropdown-content"
+                style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll"
+              >
+                <ng-container *ngFor="let result of aktiveBetAllProduct; let i = index">
+                  <div *ngIf="result.produktion_type == 2 && result.status == 'O'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="result.produktion_type == 2 && result.angebotsbezeichnung != null && result.angebotsbezeichnung != ''"
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result?.angebotsbezeichnung }}
+                      </div>
+                      <div (click)="produktAndernEditModal(result, 'prod', 'own')" class="pointer f-w-600 p-l-10">
+                        {{ result.produkt_name }}
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="result.produktion_type == 1 && result.status == 'O'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="result.produktion_type == 1 && result.angebotsbezeichnung != null && result.angebotsbezeichnung != ''"
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result?.angebotsbezeichnung }}
+                      </div>
+                      <div (click)="produktAndernEditModal(result, 'werk', 'own')" class="pointer f-w-600 p-l-10">
+                        {{ result.produkt_name }}
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="result.produktion_type == 0 && result.status == 'O' && result.recht_edit == 'J'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndernEditModal(result, 'spiel', 'own')" class="pointer f-w-600 p-l-10">{{
+                        result.produkt_name
+                      }}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div
+                *ngIf="aktiveBetAllProduct.length == 0"
+                class="dropdown-content"
+                style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll"
+              >
+                <ng-container *ngFor="let result of favoriteProdSpielList; let i = index">
+                  <div *ngIf="result.favorit_art == 2" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div (click)="produktAndernEditModal(result, 'prod', 'fav')" class="pointer f-w-600 p-l-10">
+                        {{ result.favorit_objekt_bezeichnung }}
+                      </div>
+                    </div>
+                    <div class="p-l-10" style="font-size: 10px">{{ result.betrieb_name }}</div>
+                  </div>
+                  <div *ngIf="result.favorit_art == 3" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndernEditModal(result, 'spiel', 'fav')" class="pointer f-w-600 p-l-10">{{
+                        result.favorit_objekt_bezeichnung
+                      }}</span>
+                    </div>
+                    <div class="p-l-10" style="font-size: 10px">{{ result.betrieb_name }}</div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div
+              *ngIf="
+                resultFoundEdit.length != 0 &&
+                showResultListEdit &&
+                displayProdSearchResultEdit &&
+                !(searchStringEdit == '' || searchStringEdit == null)
+              "
+              class="col-lg-12"
+              style="position: absolute; background: #fff; z-index: 10; width: 100%; right: 0px"
+            >
+              <div class="dropdown-content" style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll">
+                <ng-container *ngFor="let result of resultFoundEdit; let i = index">
+                  <div *ngIf="result._index == 'prod'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <div
+                        *ngIf="
+                          result._source.interne_bezeichnung_der_produkts != null && result._source.interne_bezeichnung_der_produkts != ''
+                        "
+                        class="p-l-10"
+                        style="font-size: 10px"
+                      >
+                        {{ result._source.interne_bezeichnung_der_produkts }}
+                      </div>
+                      <div
+                        (click)="produktAndernEditModal(result._source, 'prod', 'elastic')"
+                        class="pointer f-w-600 p-l-10 d-inline-block"
+                      >
+                        {{ result._source?.prodWerkSearchTeilDTO.titel }}
+                        <span>
+                          von
+                          <em
+                            ><span class="betriebinsearch">{{ result._source?.betriebsname }} </span>
+                          </em></span
+                        >
+                      </div>
+                      <div *ngIf="result.dateConflict != undefined && !result.dateConflict" class="d-inline-block">
+                        <i
+                          class="icofont-ban text-danger"
+                          ngbTooltip="Ihr ausgewähltes Datum liegt nicht im angegebenen Tourneezeitraum dieser Produktion"
+                          placement="bottom"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="result._index == 'spiel'" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                      <i class="iconcircle-spiel icofont-flag"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                      <span (click)="produktAndernEditModal(result._source, 'spiel', 'elastic')" class="pointer f-w-600 p-l-10">{{
+                        result._source?.interne_bezeichnung_der_produkts
+                      }}</span>
+                      <div class="p-l-10" style="font-size: 10px">
+                        <span>{{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].poststrasse }}</span>
+                        <span>{{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].postplz }}</span>
+                        <span> {{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].liste_land_glieds_bezeichnung }}</span>
+                        •
+                        <span class="f-w-600">
+                          {{ result._source.spielSearchDTO.spielAdresseSearchDTOList[0].liste_lands_bezeichnung }}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="m-t-10">
+                                          <app-search-betriebe-elastic (betriebFoundInCrowd)="resultNotFoundInCrowd($event)"
+                                              (inputString)="inputStringEditReset($event)" [includeKunstler]="true"
+                                              (blurInput)="hideResultBox($event, null, null);"
+                                              (clearField)="betriebRemoveEdit($event)" [classCheck]="false"
+                                              (notFound)="resultnotFound($event)" (selectedBetriebe)="selectedItemEditBetrieb($event)"
+                                              [requiredValidator]="true" [AktivBetId]="aktivBetrieb.betriebsId"
+                                              [displayAktivBet]="false" [newBetCreatedChangeClassOFInput]="newBetCreatedForRecht"
+                                              [notifier]="subjectToClearInputValueSearchBetEdit" [liland]="liland"
+                                              [searchStringForDisplay]="editBetreibsname">
+                                          </app-search-betriebe-elastic>
+              <div *ngIf="betFoundInCrowdList">
+                <span class="m-t-10 m-b-10"
+                  >Hinweis: Dieser Betrieb ist noch nicht freigegeben und kann erst für weitere Prozesse verwendet werden, sobald er
+                  bestätigt wurde.</span
+                ><br />
+              </div>
+              <select [(ngModel)]="editNoteObject.mitarbeiterId" class="custom-select-notes m-t-15">
+                <option value="null" [attr.selected]="editNoteObject.mitarbeiterId == null ? true : null">Mitarbeiter zuordnen</option>
+                <option *ngFor="let arbeiter of mitarbeiter; let l = index" [value]="arbeiter.id" id="worker{{ l }}">
+                  {{ arbeiter?.titel }}
+                  {{ arbeiter?.vorname }}
+                  {{ arbeiter?.nachname }}
+                </option>
+              </select>
+              <div>
+                <button
+                  class="btn btn-primary btn-block m-t-15"
+                  (click)="updatenotes(); closeEditObject(); displayAktiveBetProdEdit = false"
+                >
+                  Notiz speichern
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Speichern</button>
+        </div> -->
+  </div>
+</div>

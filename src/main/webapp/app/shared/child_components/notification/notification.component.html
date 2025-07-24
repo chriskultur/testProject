@@ -1,0 +1,450 @@
+<a (click)="clicknotify()" (click)="clickedInside($event)">
+    <i class="ti-bell linkstyle" style="font-size: 18px; top: 7px; position: relative;"
+        ngbTooltip="Aufgaben & Benachrichtigungen" placement="bottom-left" container="body"></i>
+    <span *ngIf="listOfNotification.length != 0 || returnNotReadNotification() != 0" (click)="bellIconClicked()"
+        class="badge bg-c-yellow">
+        <strong>{{listOfNotification.length + returnNotReadNotification()}}</strong>
+    </span>
+</a>
+<ul *ngIf="shownotify" class="shownotification-show">
+    <div class="notifyHeader">
+        <h6>Aufgaben & Benachrichtigungen</h6>
+    </div>
+    <div *ngIf="listOfNotification.length == 0 && listOfNotificationBenachrichtigung.length == 0">
+        <span class="p-10">Keine neuen Aufgaben.</span>
+    </div>
+    <li *ngFor="let notification of listOfNotification; let i = index;" style="border-bottom: 1px solid #ddd;">
+        <div class="media row"  (click)="performActionOfNotification(i)">
+            <div class=col-lg-12>
+                <div class="row">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2">
+                        <img class="d-flex align-self-center img-radius"
+                            *ngIf="notification.taskDefinitionKey == 'freigabe_einer_geschaeftsbeziehung'"
+                            src="../../../../content/images/business_icon.png"
+                            alt="Generic placeholder image">
+                        <img class="d-flex align-self-center img-radius"
+                            *ngIf="notification.taskDefinitionKey != 'freigabe_einer_geschaeftsbeziehung'"
+                            src="../../../../content/images/verknupfung_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10">
+                        <div class="media-body">
+                            <h5 class="notification-user">{{ titleForNotification(notification.taskDefinitionKey)}}</h5>
+                            <p *ngIf="notification.taskDefinitionKey != 'freigabe_einer_mitwirkendenverknuepfung' &&
+                            notification.taskDefinitionKey != 'freigabe_einer_kuenstlerverknuepfung'" class="notification-msg">
+                                {{notification.name}}
+                            </p>
+                            <p *ngIf="notification.taskDefinitionKey == 'freigabe_einer_mitwirkendenverknuepfung' ||
+                            notification.taskDefinitionKey == 'freigabe_einer_kuenstlerverknuepfung'" class="notification-msg">
+                                {{notification.description}}
+                            </p>
+                            <span class="notification-time">{{getTimeForNotification(notification.created)}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li *ngFor="let nachrichtigung of listOfNotificationBenachrichtigung; let i = index;"
+        style="border-bottom: 1px solid #ddd;">
+        <div class="media row" *ngIf=" nachrichtigung.bps_id != aktiveBetId.bpsId" [class.newnotification]="nachrichtigung.benachrichtigung_status == '0'">
+            <div class="col-lg-12" style="position: relative; top: 1px; right: -20px; z-index: 10; height: 0px;">
+                <i class="f-16 f-right icofont-minus-circle text-danger"
+                    (click)="deleteBenachrichtigungs(nachrichtigung.id, i); clickedInside($event)"></i>
+            </div>
+            <div class=col-lg-12>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 0">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <div *ngIf="nachrichtigung.list_of_changes.length != 0" class="m-t-5 m-b-5">
+                                <div *ngFor="let details of nachrichtigung.list_of_changes">
+                                    • {{details}}
+                                </div>
+                            </div>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && (nachrichtigung.beschreibung.includes('geprüft'))">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <div *ngIf="nachrichtigung.list_of_changes.length != 0" class="m-t-5 m-b-5">
+                                <div *ngFor="let details of nachrichtigung.list_of_changes">
+                                    • {{details}}
+                                </div>
+                            </div>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && nachrichtigung.beschreibung.includes('bestätigt')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && (nachrichtigung.beschreibung.includes('abgelehnt') || nachrichtigung.beschreibung.includes('zurückgezogen')) && !nachrichtigung.beschreibung.includes('bestätigt')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 3}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 3}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && nachrichtigung.beschreibung.includes('Reservierung gemacht')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && nachrichtigung.beschreibung.includes('Buchung gemacht')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && nachrichtigung.beschreibung.includes('geändert')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row"
+                    *ngIf="nachrichtigung.benachrichtigung_art == 2 && nachrichtigung.beschreibung.includes('Änderungswünsche')">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 5}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 5}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 3">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                        [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Nachricht gesendet
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Nachricht gesendet
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 4">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/businessconnection']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius"
+                            src="../../../../content/images/business_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/businessconnection']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Geschäftsbeziehung
+                                {{businessconnectionBenachrichtigung(nachrichtigung.beschreibung)}}
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 5 ">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius"
+                            src="../../../../content/images/business_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 6">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']"
+                         [queryParams]="{kalendarEintrag: nachrichtigung.kalendarId}" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                             alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']"
+                         [queryParams]="{kalendarEintrag: nachrichtigung.kalendarId}"(click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <div *ngIf="nachrichtigung.list_of_changes.length != 0" class="m-t-5 m-b-5">
+                                <div *ngFor="let details of nachrichtigung.list_of_changes">
+                                    • {{details}}
+                                </div>
+                            </div>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 7">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/calendar']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                             alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" *ngIf="!nachrichtigung.camunda" [routerLink]="['/calendar']" [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Neue Vertragsaufgabe
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <div *ngIf="nachrichtigung.list_of_changes.length != 0" class="m-t-5 m-b-5">
+                                <div *ngFor="let details of nachrichtigung.list_of_changes">
+                                    • {{details}}
+                                </div>
+                            </div>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/calendar']" *ngIf="nachrichtigung.camunda" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Neue Vertragsaufgabe
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <div *ngIf="nachrichtigung.list_of_changes.length != 0" class="m-t-5 m-b-5">
+                                <div *ngFor="let details of nachrichtigung.list_of_changes">
+                                    • {{details}}
+                                </div>
+                            </div>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 8">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/mitwirkende']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/mitwirkende']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 9">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 10">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" [routerLink]="['/settings', 'betrieb-settings']" (click)="onClickBenachrichtigun(i)">
+                        <img class="d-flex align-self-center img-radius" src="../../../../content/images/calendar_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" [routerLink]="['/settings', 'betrieb-settings']" (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 *ngIf="nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <h5 *ngIf="!nachrichtigung.camunda" class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 11">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" (click)="onClickBenachrichtigun(i)" >
+                        <img class="d-flex align-self-center img-radius"
+                            src="../../../../content/images/business_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10"  (click)="onClickBenachrichtigun(i)">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Neue Benachrichtigung
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="nachrichtigung.benachrichtigung_art == 12">
+                    <ng-container *ngIf="nachrichtigung.camunda">
+                        <div class="col-lg-3 col-md-2 col-sm-2 col-2" (click)="onClickBenachrichtigun(i)" [routerLink]="['/calendar']"  >
+                            <img class="d-flex align-self-center img-radius"
+                                 src="../../../../content/images/business_icon.png"
+                                 alt="Generic placeholder image">
+                        </div>
+                        <div class="col-lg-9 col-md-10 col-sm-10 col-10" (click)="onClickBenachrichtigun(i)" [routerLink]="['/calendar']">
+                            <div class="media-body">
+                                <h5 class="notification-user"> Neue Kalenderaufgabe
+                                </h5>
+                                <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                                <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!nachrichtigung.camunda">
+                    <div class="col-lg-3 col-md-2 col-sm-2 col-2" (click)="onClickBenachrichtigun(i)" [routerLink]="['/calendar']" [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}" >
+                        <img class="d-flex align-self-center img-radius"
+                            src="../../../../content/images/business_icon.png"
+                            alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-md-10 col-sm-10 col-10" (click)="onClickBenachrichtigun(i)" [routerLink]="['/calendar']" [queryParams]="{anbahnId: nachrichtigung.anbasId, tp: 4}">
+                        <div class="media-body">
+                            <h5 class="notification-user"> Neue Kalenderaufgabe
+                            </h5>
+                            <p class="notification-msg">{{nachrichtigung.beschreibung}}</p>
+                            <span class="notification-time">{{getTimeForNotification(nachrichtigung.datum)}}</span>
+                        </div>
+                    </div>
+                    </ng-container>
+                </div>
+                <div *ngIf="nachrichtigung.camunda"> <i class="icofont-exclamation-circle f-18 m-l-10" ngbTooltip="Aufgabe"></i></div>
+            </div>
+        </div>
+    </li>
+</ul>
+<!--Begin Notification PopUp-->
+<ng-template #notificationPopUp let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">{{notificationTitleForPopUp}}</h5>
+        <button type="button" class="close" style="cursor: pointer;" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-12 form-group">
+                <label>{{selectedNotification.notification.name}}</label>
+            </div>
+        </div>
+        <div class="row" style="padding: 15px 5px; margin: 0px 17px 20px 0px;background-color: #ddd;">
+            <div class="col-lg-12 ">
+                <i class="icofont-exclamation-tringle text-danger f-18"></i>
+                <span>{{selectedNotification.notification.hilfe}}</span>
+            </div>
+        </div>
+        <!-- <div class="row m-t-10">
+            <div class="col-lg-12 form-group">
+                <a style="cursor: pointer;" class="ahreflink"
+                   (click)="c('Close click'); redirectToUserProfile();">{{infoForViewBetBen()}}</a>
+            </div>
+        </div> -->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click'); declineNotification();">
+            Ablehnen
+        </button>
+        <button type="submit" class="btn btn-success"
+            (click)="c('Close click'); acceptInvitationThroughNotification();">Freigabe / Akzeptieren
+        </button>
+    </div>
+</ng-template>
+<!--End Notification PopUp-->

@@ -1,0 +1,8 @@
+<quill-editor name="{{name}}"
+    [(ngModel)]="editorContent"
+    (blur)="onEditorBlured($event)"
+    (focus)="onEditorFocused($event)"
+    [formats]="formats" [readOnly]="readOnly"
+    (onEditorCreated)="onEditorCreated($event)"
+    (onContentChanged)="onContentChanged($event)">
+</quill-editor>

@@ -1,0 +1,279 @@
+.templatebutton {
+  position: absolute;
+  right: 20px;
+  top: 58px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+.templatebutton2 {
+  position: absolute;
+  right: 50px;
+  top: 58px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+.templatebutton:hover {
+  background: #f28d35;
+  color: #fff;
+}
+.templatebutton2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+.templatebuttonactive {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatetitlearea {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 92px;
+  width: 478px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.savedtemplate:hover {
+  background: #ccc;
+  color: #fff;
+  padding: 10px;
+}
+
+.templateupicon {
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  top: 3px;
+}
+
+.tempbottomborder {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.templatebuttonadd {
+  position: absolute;
+  right: 20px;
+  top: 54px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonadd2 {
+  position: absolute;
+  right: 50px;
+  top: 54px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttoninvite {
+  position: absolute;
+  right: 20px;
+  top: 29px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttoninvite2 {
+  position: absolute;
+  right: 50px;
+  top: 29px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonadd:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonadd2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttoninvite:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttoninvite2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonactiveadd {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatetitleareaadd {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 92px;
+  width: 527px;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.templatetitleareainvite {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 62px;
+  width: 97%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.templatebuttonbig {
+  position: absolute;
+  right: 5px;
+  top: 38px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonbig2 {
+  position: absolute;
+  right: 40px;
+  top: 38px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonbig:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonbig2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonactivebig {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatetitleareabig {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 92px;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.templatebuttonpend {
+  position: absolute;
+  right: 20px;
+  top: 135px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonpend2 {
+  position: absolute;
+  right: 55px;
+  top: 135px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonpend:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonpend2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonactivepend {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatetitleareapend {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 170px;
+  width: 96%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.templatebuttonstorno {
+  position: absolute;
+  right: 25px;
+  top: 18px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonstorno2 {
+  position: absolute;
+  right: 60px;
+  top: 18px;
+  font-size: 14px;
+  padding: 2px 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.templatebuttonstorno:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatebuttonstorno2:hover {
+  background: #f28d35;
+  color: #fff;
+}
+
+.templatetitleareastorno {
+  border: 1px solid #ccc;
+  background: #ddd;
+  padding: 5px 10px;
+  position: absolute;
+  top: 51px;
+  width: 96%;
+  overflow-y: auto;
+  max-height: 200px;
+}

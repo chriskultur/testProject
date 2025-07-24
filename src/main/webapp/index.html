@@ -1,0 +1,143 @@
+<!doctype html>
+<html class="no-js" lang="de" dir="ltr">
+
+<head>
+  <base href="/" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="MCj53eA2M466zSO7mcxsJNi__SBgS0b_DZFOs98TiWw" />
+  <title>eKulturPortal - die digitale Lösung für die Kulturbranche</title>
+  <meta name="description"
+        content="Im eKulturPortal können Sie Ihr Netzwerk erweitern, spannende Produktionen, Werke und Spielstätten finden & buchen und Ihre Spielzeit planen & verwalten.">
+  <meta name="google" content="notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="favicon.ico" />
+  <link rel="manifest" href="manifest.webapp" />
+  <!--    <link rel="stylesheet" href="content/css/loading.css">-->
+  <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7K1VXTVEV7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7K1VXTVEV7');
+  </script>
+  <!-- Matomo -->
+  <script type="text/javascript">
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//matomo.ekulturportal-test.de/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', '1']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!--    <img referrerpolicy="no-referrer-when-downgrade" src="https://matomo.ekulturportal-test.de/matomo.php?idsite=1&amp;rec=1" style="border:0" alt="" />-->
+  <!-- End Matomo Code -->
+
+</head>
+
+<body>
+<!-- <div class="hidemobile">
+    <img src="https://e-kultur.eu/wp-content/uploads/2015/10/BMWi_4C_M-Gef.png" alt="BMWI" class="bmwi-logo" />
+</div> -->
+<app-root></app-root>
+<noscript>
+  <h1>You must enable javascript to view this page.</h1>
+</noscript>
+<script type="text/javascript" language="javascript">
+  // show an error message if the app loading takes more than 5 sec
+  window.onload = function () {
+    setTimeout(showError, 4000);
+  }
+  function showError() {
+    var errorElm = document.getElementById("jhipster-error");
+    if (errorElm && errorElm.style) {
+      errorElm.style.display = "block";
+    }
+  }
+</script>
+
+<script>
+  check();
+  function check() {
+    if (window.location.pathname == "/homepage" || window.location.pathname == "/" || window.location.pathname.indexOf("/public/") == 0) {
+
+      let nVer = navigator.appVersion;
+      let nAgt = navigator.userAgent;
+      let browserName = navigator.appName;
+      let fullVersion = '' + parseFloat(navigator.appVersion);
+      let majorVersion = parseInt(navigator.appVersion, 10);
+      let nameOffset, verOffset, ix;
+
+      // In Opera, the true version is after "Opera" or after "Version"
+      if ((verOffset = nAgt.indexOf("Opera")) != -1) {
+        browserName = "Opera";
+        fullVersion = nAgt.substring(verOffset + 6);
+        if ((verOffset = nAgt.indexOf("Version")) != -1)
+          fullVersion = nAgt.substring(verOffset + 8);
+      }
+      // In MSIE, the true version is after "MSIE" in userAgent
+      else if ((verOffset = nAgt.indexOf("MSIE")) != -1) {
+        browserName = "Microsoft Internet Explorer";
+        fullVersion = nAgt.substring(verOffset + 5);
+      }
+      // In Chrome, the true version is after "Chrome"
+      else if ((verOffset = nAgt.indexOf("Chrome")) != -1) {
+        browserName = "Chrome";
+        fullVersion = nAgt.substring(verOffset + 7);
+      }
+      // In Safari, the true version is after "Safari" or after "Version"
+      else if ((verOffset = nAgt.indexOf("Safari")) != -1) {
+        browserName = "Safari";
+        fullVersion = nAgt.substring(verOffset + 7);
+        if ((verOffset = nAgt.indexOf("Version")) != -1)
+          fullVersion = nAgt.substring(verOffset + 8);
+      }
+      // In Firefox, the true version is after "Firefox"
+      else if ((verOffset = nAgt.indexOf("Firefox")) != -1) {
+        browserName = "Firefox";
+        fullVersion = nAgt.substring(verOffset + 8);
+      }
+      // In most other browsers, "name/version" is at the end of userAgent
+      else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) <
+        (verOffset = nAgt.lastIndexOf('/'))) {
+        browserName = nAgt.substring(nameOffset, verOffset);
+        fullVersion = nAgt.substring(verOffset + 1);
+        if (browserName.toLowerCase() == browserName.toUpperCase()) {
+          browserName = navigator.appName;
+        }
+      }
+      // trim the fullVersion string at semicolon/space if present
+      if ((ix = fullVersion.indexOf(";")) != -1)
+        fullVersion = fullVersion.substring(0, ix);
+      if ((ix = fullVersion.indexOf(" ")) != -1)
+        fullVersion = fullVersion.substring(0, ix);
+
+      majorVersion = parseInt('' + fullVersion, 10);
+      if (isNaN(majorVersion)) {
+        fullVersion = '' + parseFloat(navigator.appVersion);
+        majorVersion = parseInt(navigator.appVersion, 10);
+      }
+      if (browserName == "Safari" && majorVersion < 15) {
+        alert('Das eKulturPortal funktioniert NICHT mit Ihrer veralteten Version des Safari Browsers. Bitte updaten Sie auf eine neuere Version oder benutzen Sie Firefox oder Chrome.')
+      }
+      if (browserName == "Netscape") {
+        alert('Das eKulturPortal funktioniert NICHT mit Internet Explorer! Bitte benutzen Sie die neueste Version von Chrome, Safari oder Firefox.')
+      }
+
+    }
+  }
+</script>
+
+</body>
+
+</html>

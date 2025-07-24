@@ -1,0 +1,145 @@
+<input type="text" class="form-control" *ngIf="classCheck" [required]="requiredValidator" name="betriebeSearchString"
+    placeholder="Stichwort eingeben" [(ngModel)]="searchStringBetSuch" (keyup)="keyUp.next($event)">
+<input type="text" *ngIf="!classCheck" class="form-control-feedback form-control subject e-field" style="width: 100%;"
+    name="betriebeSearchString" placeholder="Vertragspartner verknüpfen" [(ngModel)]="searchStringBetSuch"
+    (keyup)="keyUp.next($event)">
+    <span *ngIf="!classCheck" (click)="clearSearchValueAndSendNotifyBack()"
+    class="textlink"><i class="icofont-minus-circle m-r-10"
+        style="position: absolute; right: 10px; top: 75px;"></i> </span>
+<div *ngIf="resultFound.length == 0 && searchStringBetSuch != null && searchStringBetSuch != '' && foundInCrowd">
+    <span>Hinweis: Dieser Betrieb wurde noch nicht geprüft und freigegeben</span>
+</div>
+<div *ngIf="resultFound.length != 0 && showResultList">
+    <div class="f-right m-t-5" style="position: relative;  top: -39px; right: 5px;"
+        *ngIf="resultFound.length != 0 && !searchStringHasMatchInResult && searchStringBetSuch != null && searchStringBetSuch != '' && classCheck">
+        <button (click)="displayOtherOptionToCreateBet()" class="addbutton2">Betriebsnamen
+            auswählen</button>
+    </div>
+    <div class="dropdown-content">
+        <div class="row greyhover-result pointer" style="background: #dddddd;"
+            *ngIf="resultFound.length >= 1 && displayExtraOption && searchStringHasMatchInResult">
+            <div class="col-lg-12">
+                <div style="display: inline-block; margin-top: 5px;">Wollen Sie <span
+                        class="f-w-600">{{resultFound[0]._source?.betriebsname}}</span> in einem anderen Land anlegen?
+                </div>
+                <button (click)="createCompanyWithDiffLand()" class="btn btn-sm btn-primary f-right">Betrieb neu
+                    anlegen</button>
+            </div>
+
+        </div>
+        <ng-container *ngFor="let result of resultFound; trackBy: trackByIndex; let i=index;">
+            <div class="row greyhover-result" *ngIf="!displayAktivBet && result._source.id != AktivBetId">
+                <div class="col-lg-1 col-3" *ngIf="result._index == 'betrieb'">
+                    <i class="iconcircle-betrieb icofont-company"></i>
+                </div>
+                <div class="col-lg-1 col-3" *ngIf="result._index == 'kunst'">
+                    <i class="iconcircle-artist icofont-star-shape"></i>
+                </div>
+                <div class="col-lg-11 col-9">
+                    <span class="" id="basic-addon1"
+                        *ngIf="result._source.betriebsverwaltungCode != null && result._index == 'betrieb'">
+                        <i *ngIf="result._source.betriebsverwaltungCode == 1" ngbTooltip="Geprüft & Aktiv"
+                            placement="left" class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsverwaltungCode == 0" ngbTooltip="Betrieb in Prüfung"
+                            placement="left" class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="" id="basic-addon178" *ngIf="result._index == 'kunst'">
+                        <i *ngIf="result._source.betriebsstatus == 2" ngbTooltip="Geprüft & Aktiv" container="body"
+                            class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsstatus == 0 || result._source.betriebsstatus == 1"
+                            ngbTooltip="Noch nicht geprüft" container="body" container="body"
+                            class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="pointer f-w-600" *ngIf="result._index == 'betrieb'"
+                        (click)="clearSearchVal(result._source)">{{result._source?.betriebsname}}</span>
+                    <ng-container *ngIf="result._source.hasOwnProperty('kunstlername') && result._index == 'kunst'">
+                        <span class="pointer f-w-600"
+                            *ngIf="result._source.kunstlername != null && result._source.kunstlername != ''"
+                            (click)="clearSearchVal(result._source)">{{result._source?.kunstlername}}
+                            ({{result._source?.vorname}} {{result._source?.name}})</span>
+                        <span class="pointer f-w-600"
+                            *ngIf="result._source.kunstlername == null || result._source.kunstlername == ''"
+                            (click)="clearSearchVal(result._source)">{{result._source?.vorname}}
+                            {{result._source?.name}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!result._source.hasOwnProperty('kunstlername') && result._index == 'kunst'">
+                        <span class="pointer f-w-600"
+                            (click)="clearSearchVal(result._source)">{{result._source?.vorname}}
+                            {{result._source?.name}}</span>
+                    </ng-container>
+                    <span *ngIf="result._source?.betriebAdresseSearchDTO?.liste_land_glieds_bezeichnung != null">
+                        <img style=" height: 20px;"
+                            [src]="getImageOfLand(result._source?.betriebAdresseSearchDTO?.liste_land_glieds_bezeichnung)">
+                    </span>
+                    <span *ngIf="result._source?.betriebkatDTOList.length != 0">
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[0]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[0]?.bezeichnung + ' '}}</button>
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[1]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[1]?.bezeichnung + ' '}}</button>
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[2]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[2]?.bezeichnung }}</button>
+                    </span>
+                </div>
+            </div>
+            <div class="row greyhover-result" *ngIf="displayAktivBet">
+                <div class="col-lg-1 col-3" *ngIf="result._index == 'betrieb'">
+                    <i class="iconcircle-betrieb icofont-company"></i>
+                </div>
+                <div class="col-lg-1 col-3" *ngIf="result._index == 'kunst'">
+                    <i class="iconcircle-artist icofont-star-shape"></i>
+                </div>
+                <div class="col-lg-11 col-9">
+                    <span class="" id="basic-addon12"
+                        *ngIf="result._source.betriebsverwaltungCode != null && result._index == 'betrieb'">
+                        <i *ngIf="result._source.betriebsverwaltungCode == 1" ngbTooltip="Geprüft & Aktiv"
+                            placement="left" class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsverwaltungCode == 0" ngbTooltip="Betrieb in Prüfung"
+                            placement="left" class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="" id="basic-addon178" *ngIf="result._index == 'kunst'">
+                        <i *ngIf="result._source.betriebsstatus == 2" ngbTooltip="Geprüft & Aktiv" container="body"
+                            class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsstatus == 0 || result._source.betriebsstatus == 1"
+                            ngbTooltip="Noch nicht geprüft" container="body" container="body"
+                            class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="pointer f-w-600" *ngIf="result._index == 'betrieb'"
+                        (click)="clearSearchVal(result._source)">{{result._source?.betriebsname}}</span>
+                    <ng-container *ngIf="result._source.hasOwnProperty('kunstlername') && result._index == 'kunst'">
+                        <span class="pointer f-w-600"
+                            *ngIf="result._source.kunstlername != null && result._source.kunstlername != ''"
+                            (click)="clearSearchVal(result._source)">{{result._source?.kunstlername}}
+                            ({{result._source?.vorname}} {{result._source?.name}})</span>
+                        <span class="pointer f-w-600"
+                            *ngIf="result._source.kunstlername == null || result._source.kunstlername == ''"
+                            (click)="clearSearchVal(result._source)">{{result._source?.vorname}}
+                            {{result._source?.name}}</span>
+                    </ng-container>
+                    <ng-container *ngIf="!result._source.hasOwnProperty('kunstlername') && result._index == 'kunst'">
+                        <span class="pointer f-w-600"
+                            (click)="clearSearchVal(result._source)">{{result._source?.vorname}}
+                            {{result._source?.name}}</span>
+                    </ng-container>
+                    <span *ngIf="result._source?.betriebAdresseSearchDTO?.liste_land_glieds_bezeichnung != null">
+                        <img style=" height: 20px;"
+                            [src]="getImageOfLand(result._source?.betriebAdresseSearchDTO?.liste_land_glieds_bezeichnung)">
+                    </span>
+                    <span *ngIf="result._source?.betriebkatDTOList.length != 0">
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[0]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[0]?.bezeichnung + ' '}}</button>
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[1]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[1]?.bezeichnung + ' '}}</button>
+                        <button class="tagbutton-globalsearch"
+                            *ngIf="result._source.betriebkatDTOList[2]?.bezeichnung != null">
+                            {{result._source.betriebkatDTOList[2]?.bezeichnung }}</button>
+                    </span>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

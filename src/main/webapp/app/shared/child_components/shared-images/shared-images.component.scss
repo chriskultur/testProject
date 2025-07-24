@@ -1,0 +1,124 @@
+.image-fit {
+  object-fit: cover;
+  max-height: 250px;
+  max-width: 250px;
+  height: 250px;
+  width: 250px;
+}
+
+.image-cropper {
+  max-width: 800px;
+  max-height: 500px;
+  width: 1000px;
+  height: 500px;
+  object-fit: contain;
+  align-content: center;
+  align-self: center;
+}
+
+.imgupload {
+  position: relative;
+}
+
+/* @media only screen and (max-width: 992px) {
+    .uploadbutton{
+        color: white;
+        cursor: pointer;
+        padding: 4px;
+        background-color: #f28d35;
+        border: 0.5px solid;
+        border-color: #f28d35;
+        border-radius: 7px;
+        font-size: 12px;
+        width: 60%;
+        position: absolute;
+        top: 45%;
+        left: 20%;
+    }
+    } */
+
+@media only screen and (max-width: 1199px) {
+  .uploadbutton {
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    background-color: #f28d35;
+    border: 0.5px solid;
+    border-color: #f28d35;
+    border-radius: 7px;
+    font-size: 12px;
+    width: 64%;
+    position: absolute;
+    top: 44%;
+    left: 18%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .uploadbutton {
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    background-color: #f28d35;
+    border: 0.5px solid;
+    border-color: #f28d35;
+    border-radius: 7px;
+    font-size: 12px;
+    width: 100%;
+    position: absolute;
+    top: 37%;
+    left: 0%;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .profilepic {
+    width: 65%;
+    height: auto;
+    border: 1px solid #afafaf;
+    border-radius: 50%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .profilepic {
+    width: 100%;
+    height: auto;
+    border: 1px solid #afafaf;
+    border-radius: 50%;
+  }
+}
+
+.signpic {
+  max-width: 165px;
+  height: 70px;
+}
+
+.hide {
+  display: none;
+}
+
+.deletepic {
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  display: block;
+  margin-top: 5px;
+}
+
+.showonhover {
+  display: none;
+}
+
+.imgupload:hover .showonhover {
+  display: block !important;
+}
+
+.choosesign {
+  cursor: pointer;
+  font-weight: 300;
+  border: 1px solid #ddd;
+  padding: 3px;
+  border-radius: 3px;
+  margin-top: 5px;
+}

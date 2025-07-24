@@ -1,0 +1,282 @@
+<input type="text" name="betriebsname" class="form-control" style="border-left: none !important;" autocomplete="off"
+    style="width: 100%" placeholder="Stichwort eingeben" [(ngModel)]="searchWithWord" (keyup)="keyUp.next($event)"
+    (click)="clickplus()" (click)="clickedInside($event)">
+<div *ngIf="showplus" id="myDropdown" container="body">
+    <div class="dropdown-content p-l-10" *ngIf="!showDefault">
+        <div class="f-w-600 m-b-10 m-t-10">Suchergebnisse</div>
+        <ng-container *ngFor="let result of resultList; trackBy: trackByIndex; let i=index;">
+            <div *ngIf="result._index == 'prod'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-prod icofont-star-alt-1" ngbTooltip="Produktion" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer" [routerLink]="['/production-view', betriebServiceGlob.sanitizeForRoute(result._source.prodWerkSearchTeilDTO?.titel), result._source?.id ]"
+                (click)="clearSearchVal()">
+                    <div *ngIf="result._source.interne_bezeichnung_der_produkts != null && result._source.interne_bezeichnung_der_produkts != ''"
+                        class="pointer f-12" style="margin-top: -10px;"
+                        [routerLink]="['/production-view', betriebServiceGlob.sanitizeForRoute(result._source.prodWerkSearchTeilDTO?.titel), result._source?.id ]"
+                        (click)="clearSearchVal()" >
+                        {{result._source.interne_bezeichnung_der_produkts}}<br></div>
+                    <span class="pointer f-w-600"
+                        [routerLink]="['/production-view', betriebServiceGlob.sanitizeForRoute(result._source.prodWerkSearchTeilDTO?.titel), result._source?.id ]"
+                        (click)="clearSearchVal()">{{result._source.prodWerkSearchTeilDTO?.titel}}</span>
+                    <span> von <em><span>{{result._source?.betriebsname}} </span> </em></span>
+                    <ng-container *ngFor="let prodGenre of result._source.prodProdGenreDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                            <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                                    *ngIf="prodGenre?.bezeichnung != null"
+                                    [routerLink]="['/search-result']"
+                                    [queryParams]="{val: prodGenre?.bezeichnung, tp: 'Prod', key: 'G'}">
+                                {{prodGenre?.bezeichnung + ' '}}</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'werk'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-werk icofont-paper" ngbTooltip="Werk" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer" [routerLink]="['/werk-view',betriebServiceGlob.sanitizeForRoute(result._source.titel), result._source.id]"
+                (click)="clearSearchVal()">
+                    <span class="pointer f-w-600"
+                        [routerLink]="['/werk-view',betriebServiceGlob.sanitizeForRoute(result._source.titel), result._source.id]"
+                        (click)="clearSearchVal()">{{result._source?.titel}}</span>
+                    <span
+                        [routerLink]="['/betrieb_view',betriebServiceGlob.sanitizeForRoute(result._source?.betriebsname), result._source?.vertriebBetriebId]"
+                        (click)="clearSearchVal()"> von <em><span>{{result._source?.betriebsname}} </span> </em> </span>
+                    <ng-container *ngFor="let werkGenre of result._source.prodWerkGenreDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                            <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                                    *ngIf="werkGenre?.bezeichnung != null"
+                                    [routerLink]="['/search-result']"
+                                    [queryParams]="{val: werkGenre?.bezeichnung, tp: 'Werk', key: 'WERK-G'}">
+                                {{werkGenre?.bezeichnung + ' '}}</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'spiel' && result._source?.angeSpielSearchDTO != null" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-spiel icofont-flag" ngbTooltip="Spielstätte" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer" style="margin-top: -10px;" [routerLink]="['/stage-view',betriebServiceGlob.sanitizeForRoute(result._source?.interne_bezeichnung_der_produkts), result?._source.id]"
+                (click)="clearSearchVal()">
+                    <span class="pointer f-w-600"
+                        [routerLink]="['/stage-view',betriebServiceGlob.sanitizeForRoute(result._source?.interne_bezeichnung_der_produkts), result?._source.id]"
+                        (click)="clearSearchVal()">{{result?._source.interne_bezeichnung_der_produkts}}</span>
+                        <div class="f-12">
+                            <i class="icofont-location-pin"></i> {{result._source?.spielSearchDTO.spielAdresseSearchDTOList[0]?.poststrasse}}, {{result._source?.spielSearchDTO.spielAdresseSearchDTOList[0]?.postplz}} {{result._source?.spielSearchDTO.spielAdresseSearchDTOList[0]?.poststadt}} ({{result._source?.spielSearchDTO.spielAdresseSearchDTOList[0]?.liste_lands_bezeichnung}})
+                        </div>
+                    <span
+                        [routerLink]="['/betrieb_view',betriebServiceGlob.sanitizeForRoute(result._source?.Betriebsname), result._source?.betriebsId]"
+                        (click)="clearSearchVal()"> von <em><span>{{result._source?.Betriebsname}} </span></em></span>
+                    <ng-container *ngFor=" let spielArtDTO of result._source.prodSpielArtDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                            <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                                    *ngIf="spielArtDTO?.bezeichnung != null"
+                                    [routerLink]="['/search-result']"
+                                    [queryParams]="{val: spielArtDTO?.bezeichnung, tp: 'Spiel', key: 'SPIEL-A'}">
+                                {{spielArtDTO?.bezeichnung + ' '}}</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'betrieb'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-betrieb icofont-company" ngbTooltip="Betrieb" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer"  [routerLink]="['/betrieb_view',betriebServiceGlob.sanitizeForRoute(result._source?.betriebsname), result._source?.id]"
+                (click)="clearSearchVal()">
+                    <span class="" id="basic-addon1" *ngIf="result._source.betriebsverwaltungCode != null">
+                        <i *ngIf="result._source.betriebsverwaltungCode == 1" ngbTooltip="Geprüft & Aktiv" container="body"
+                            class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsverwaltungCode == 0" ngbTooltip="Betrieb inaktiv oder in Prüfung" container="body"
+                            container="body" class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="pointer f-w-600"
+                        [routerLink]="['/betrieb_view',betriebServiceGlob.sanitizeForRoute(result._source?.betriebsname), result._source?.id]"
+                        (click)="clearSearchVal()">{{result._source?.betriebsname}}</span>
+                    <span *ngIf="result._source?.betriebAdresseSearchDTO.liste_land_glieds_bezeichnung != null"><img
+                            style=" height: 20px;"
+                            [src]="getImageOfLang(result._source?.betriebAdresseSearchDTO.liste_land_glieds_bezeichnung)">
+                    </span>
+                    <!-- {{result._source.betriebAdresseSearchDTO?.liste_land_glieds_bezeichnung}} -->
+                    <span *ngIf="result._source.betriebkatDTOList.length != 0">
+                    <ng-container *ngFor="let betriebKat of result._source.betriebkatDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                            <button class="tagbutton-globalsearch"
+                                                            *ngIf="betriebKat?.bezeichnung != null" (click)="clearSearchVal()"
+                                                            [routerLink]="['/search-result']"
+                                                            [queryParams]="{val: betriebKat?.bezeichnung, tp: 'Bet', key: null}">
+                            {{betriebKat?.bezeichnung + ' '}}
+                            </button>
+                        </ng-container>
+                    </ng-container>
+
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'kunst'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-artist icofont-star-shape" ngbTooltip="Künstler" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer" [routerLink]="['/artist-view', result._source?.betriebId]"
+                (click)="clearSearchVal()">
+                    <span class="" id="basic-addon1">
+                        <i *ngIf="result._source.betriebsstatus == 2" ngbTooltip="Geprüft & Aktiv" container="body"
+                            class="icofont-check-circled text-c-green checkicon"></i>
+                        <i *ngIf="result._source.betriebsstatus == 0 || result._source.betriebsstatus == 1" ngbTooltip="Noch nicht geprüft" container="body"
+                            container="body" class="icofont-clock-time checkicon"></i>
+                    </span>
+                    <span class="pointer f-w-600"
+                        [routerLink]="['/artist-view', result._source?.betriebId]"
+                        (click)="clearSearchVal()">
+                        <span *ngIf="result._source?.kunstlername != null && result._source?.kunstlername != ''">{{result._source?.kunstlername}}</span>
+                        <span *ngIf="result._source?.kunstlername == null || result._source?.kunstlername == ''">{{result._source?.vorname}} {{result._source?.name}}</span>
+                    </span>
+                    <span *ngIf="result._source?.betriebadresseDTO && result._source?.betriebadresseDTO.liste_lands_id != null"><img
+                        style=" height: 20px;"
+                        [src]="getLandName(result._source?.betriebadresseDTO.liste_lands_id)">
+                    </span>
+                    <span *ngIf="result._source.betriebkatDTOList.length != 0">
+                    <ng-container *ngFor="let betriebKat of result._source.betriebkatDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                            <button class="tagbutton-globalsearch"
+                                    *ngIf="betriebKat?.bezeichnung != null" (click)="clearSearchVal()"
+                                    [routerLink]="['/search-result']"
+                                    [queryParams]="{val: betriebKat?.bezeichnung, tp: 'kunst', key: null}">
+                            {{betriebKat?.bezeichnung + ' '}}
+                            </button>
+                        </ng-container>
+                    </ng-container>
+
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'benutzer'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-user icofont-ui-user" ngbTooltip="Benutzer" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9 pointer" [routerLink]="['/user/userprofile_view',result._source.id]">
+                    <span class="pointer f-w-600" (click)="clearSearchVal()"
+                        [routerLink]="['/user/userprofile_view',result._source.id]">{{result._source?.anrede}}&nbsp;&nbsp;{{result._source?.vorname}}&nbsp;&nbsp;{{result._source?.nachname}}</span>
+                    <ng-container *ngFor="result._source.bpBerufSearchDTOList; let i=index">
+                        <ng-container *ngIf="i<3">
+                        <button class="tagbutton-globalsearch"
+                                *ngIf="result._source.bpBerufSearchDTOList[0]?.beruf != null" (click)="clearSearchVal()"
+                                [routerLink]="['/search-result']"
+                                [queryParams]="{val: result._source.bpBerufSearchDTOList[0]?.beruf, tp: 'Ben', key: null}">
+                            {{result._source.bpBerufSearchDTOList[0]?.beruf + ' '}}</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <div *ngIf="result._index == 'wissensdatenbankekulturportalde-post-1'" class="row greyhover-result">
+                <div class="col-lg-1 col-3">
+                    <i class="iconcircle-kb icofont-paragraph" ngbTooltip="KnowledgeBase" container="body"></i>
+                </div>
+                <div class="col-lg-11 col-9" (click)="openKnowledgeQuestion(result._source?.permalink)">
+                    <span class="pointer f-w-600">{{result._source?.post_title}}</span>
+                    <span> von <em><span class="betriebinsearch">{{result._source?.post_author.display_name}} </span>
+                        </em> </span>
+
+                    <!--  <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                        *ngIf="result._source.prodWerkGenreDTOList[0]?.bezeichnung != null"
+                        [routerLink]="['/search-result']"
+                        [queryParams]="{val: result._source.prodWerkGenreDTOList[0]?.bezeichnung, tp: 'Werk', key: 'WERK-G'}">
+                        {{result._source.prodWerkGenreDTOList[0]?.bezeichnung + ' '}}</button>
+                    <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                        *ngIf="result._source.prodWerkGenreDTOList[1]?.bezeichnung != null"
+                        [routerLink]="['/search-result']"
+                        [queryParams]="{val: result._source.prodWerkGenreDTOList[1]?.bezeichnung, tp: 'Werk', key: 'WERK-G'}">
+                        {{result._source.prodWerkGenreDTOList[1]?.bezeichnung + ' '}}</button>
+                    <button class="tagbutton-globalsearch" (click)="clearSearchVal()"
+                        *ngIf="result._source.prodWerkGenreDTOList[2]?.bezeichnung != null"
+                        [routerLink]="['/search-result']"
+                        [queryParams]="{val: result._source.prodWerkGenreDTOList[2]?.bezeichnung, tp: 'Werk', key: 'WERK-G'}">
+                        {{result._source.prodWerkGenreDTOList[2]?.bezeichnung }}</button>-->
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div *ngIf="showDefault" class="p-l-10 dropdown-content">
+        <div class="f-w-600 m-b-10 m-t-10" style="background: #ddd; margin-left: -10px; padding: 10px 0px 10px 15px;">Im eKulturPortal finden Sie</div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-prod icofont-star-alt-1" ngbTooltip="Produktion" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'production'}">Produktionen</a>
+            </div>
+        </div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-werk icofont-paper" ngbTooltip="Werk" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'werkAll'}">Werke</a>
+            </div>
+        </div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-spiel icofont-flag" ngbTooltip="Spielstätte" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'spielAll'}">Spielstätten</a>
+            </div>
+        </div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-artist icofont-star-shape" ngbTooltip="Künstler" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'kunst'}">Künstler</a>
+            </div>
+        </div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-betrieb icofont-company" ngbTooltip="Betrieb" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'company'}">Betriebe</a>
+            </div>
+        </div>
+        <div class="row greyhover" style="border-bottom: 1px solid #ddd;">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-user icofont-ui-user" ngbTooltip="Benutzer" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'user'}">Benutzer</a>
+            </div>
+        </div>
+        <div class="row greyhover">
+            <div class="col-lg-1 col-3">
+                <div class="m-t-10" style="text-align: center">
+                    <i class="iconcircle-kb icofont-paragraph" ngbTooltip="KnowledgeBase" container="body"></i>
+                </div>
+            </div>
+            <div class="col-lg-11 col-9">
+                <a (click)="clearSearchVal()" [routerLink]="['/search-result']"
+                    [queryParams]="{val: 'knowledge'}">KnowledgeBase </a>
+            </div>
+        </div>
+    </div>
+</div>

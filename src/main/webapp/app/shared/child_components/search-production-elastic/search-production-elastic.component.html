@@ -1,0 +1,87 @@
+<div class="col-lg-12">
+    <label class="p-b-5">
+        {{titleForInput}}
+    </label>
+    <!-- <div class="f-right m-t-5" style="position: relative;  top: 45px; right: 5px;"
+           *ngIf="resultFound.length != 0">
+           <button (click)="displayOtherOptionToCreateBet()" class="addbutton2">Produktion
+               auswählen</button>
+       </div> -->
+    <input (click)="displayAktiveBetProd = !displayAktiveBetProd"
+           (keyup)="keyUp.next($event)" [(ngModel)]="searchString"
+           class="form-control subject e-field " data-name="Subject"
+           id="SubjectCreateModal" name="Subject"
+           placeholder="Geben Sie den Namen der Produktion ein"
+           [required]="requireValidation"
+           style="width:100%" type="text">           
+    <div *ngIf="displayAktiveBetProd && (searchString == '' || searchString == null) && !prodIsSelected"
+         class="col-lg-12" style="margin-left: -15px; margin-right: -15px;">
+        <div *ngIf="aktivBetProdList.length != 0 && checkAktivBetProdWithStatusOffentlich()" class="dropdown-content"
+             style="border: 1px solid #ddd; margin-top: -1px; height: 290px;
+                                        overflow-y: scroll;">
+            <ng-container *ngFor="let result of aktivBetProdList; let i=index;">
+                <div *ngIf="result.produktion_type == 2 && result.status == 'O' "
+                     (click)="aktivBetProductionSelected(result);"
+                     class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                        <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9" >
+                        <div *ngIf="result.produktion_type == 2 && result.angebotsbezeichnung != null && result.angebotsbezeichnung != '' "
+                             class="p-l-10" style="font-size: 10px;">
+                            {{result?.angebotsbezeichnung}}
+                        </div>
+                        <div class="pointer f-w-600 p-l-10">{{result.produkt_name }}</div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div *ngIf="checkAktivBetFavHasProd() && !checkAktivBetProdWithStatusOffentlich() " class="dropdown-content"
+             style="border: 1px solid #ddd; margin-top: -1px; height: 290px;
+                                        overflow-y: scroll; margin-right: -30px;">
+            <ng-container *ngFor="let result of favoriteProdSpielList; let i=index;">
+                <div *ngIf="result.favorit_art == 2" (click)="favoritProductionSelected(result)" class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                        <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                        <div class="pointer f-w-600 p-l-10">
+                            {{result.favorit_objekt_bezeichnung }}
+                            <span> von <em><span
+                                class="betriebinsearch">{{result.betrieb_name}}
+                            </span> </em></span>
+                        </div>
+                    </div>                 
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <div *ngIf="resultFound.length != 0 && !(searchString == '' || searchString == null) && !prodIsSelected"
+         class="col-lg-12">
+        <div class="dropdown-content"
+             style="border: 1px solid #ddd; margin-top: -1px; height: 290px; overflow-y: scroll; margin-left: -15px; margin-right: -15px;">
+            <ng-container *ngFor="let result of resultFound; let i=index;">
+                <div *ngIf="result._index == 'prod'"
+                     (click)="prodSelectedFromElasticList(result._source)"
+                     class="row greyhover-result">
+                    <div class="col-lg-1 col-3">
+                        <i class="iconcircle-prod icofont-star-alt-1"></i>
+                    </div>
+                    <div class="col-lg-11 col-9">
+                        <div *ngIf="result._source.interne_bezeichnung_der_produkts != null && result._source.interne_bezeichnung_der_produkts != '' "
+                             class="p-l-10" style="font-size: 10px;">
+                            {{result._source.interne_bezeichnung_der_produkts}}
+                        </div>
+                        <div class="pointer f-w-600 p-l-10 d-inline-block">
+                            {{result._source?.prodWerkSearchTeilDTO.titel }}
+                            <span> von <em><span
+                                class="betriebinsearch">{{result._source?.betriebsname}}
+                            </span> </em></span>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

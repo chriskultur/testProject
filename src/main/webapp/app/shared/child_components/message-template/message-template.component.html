@@ -1,0 +1,281 @@
+<div *ngIf="templatetype == 'edit' || templatetype == 'contract'">
+    <div class="templatebutton hidemobile pointer" [class.templatebuttonactive]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitlearea" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebutton2 hidemobile pointer" [class.templatebuttonactive]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitlearea" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+            (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templatetype == 'add'">
+    <div class="templatebuttonadd hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitleareaadd" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebuttonadd2 hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitleareaadd" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templatetype == 'big'">
+    <div class="templatebuttonbig hidemobile pointer" [class.templatebuttonactivebig]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitleareabig" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebuttonbig2 hidemobile pointer" [class.templatebuttonactivebig]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitleareabig" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+            (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templatetype == 'pending'">
+    <div class="templatebuttonpend hidemobile pointer" [class.templatebuttonactivepend]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitleareapend" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebuttonpend2 hidemobile pointer" [class.templatebuttonactivepend]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitleareapend" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+            (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templatetype == 'invite'" class="newstickycontainer">
+    <div class="templatebuttoninvite hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitleareainvite" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebuttoninvite2 hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitleareainvite" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="templatetype == 'storno'" class="newstickycontainer">
+    <div class="templatebuttonstorno hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate"
+        (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;">
+        <i class="icofont-save" ngbTooltip="Text als Vorlage speichern" container="body"></i>
+    </div>
+    <div class="templatetitleareainvite" [ngbCollapse]="!isCollapsedTemplate" id="isCollapsedTemplate">
+        <div class="m-t-10 f-w-600 m-b-10 tempbottomborder">
+            Titel
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                (click)="isCollapsedTemplate = !isCollapsedTemplate; isCollapsedTemplate2 = false;"></i>
+        </div>
+        <input class="form-control" placeholder="Geben Sie der Vorlage einen Titel" name="messageTemplateEditModal"
+            [(ngModel)]="messageTemplateTitle" type="text">
+        <button class="btn btn-primary btn-sm f-right m-t-10 m-b-10"
+            (click)="isCollapsedTemplate = !isCollapsedTemplate; saveMessageTemplate()">Speichern</button>
+    </div>
+    <div class="templatebuttonstorno2 hidemobile pointer" [class.templatebuttonactiveadd]="isCollapsedTemplate2"
+        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;">
+        <i class="icofont-arrow-down" ngbTooltip="Textvorlage laden" container="body"></i>
+    </div>
+    <div class="templatetitleareastorno" [ngbCollapse]="!isCollapsedTemplate2" id="isCollapsedTemplate2">
+        <div *ngIf="messageTemplateList.length == 0">
+            Sie haben noch keine Textvorlagen gespeichert.
+            <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+        </div>
+        <div *ngIf="messageTemplateList.length != 0">
+            <div class="m-t-10 m-b-10 f-w-600 tempbottomborder">
+                Textvorlagen
+                <i class="f-18 icofont-thin-up templateupicon f-right"
+                    (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; isCollapsedTemplate = false;"></i>
+            </div>
+            <ng-container *ngFor="let template of messageTemplateList; let i = index; trackBy:trackByIndex ">
+                <div class="p-10 savedtemplate">
+                    <span class="pointer"
+                        (click)="isCollapsedTemplate2 = !isCollapsedTemplate2; messageTemplateSelected(template.kontakt_text)"
+                        ngbTooltip="Textvorlage auswählen" container="body">• {{template.kontakt_titel}}
+                        <span *ngIf="template.kontakt_titel == null || template.kontakt_titel == ''"> Kein Titel</span>
+                    </span>
+                    <i (click)="deleteMessageTemplate(template.id);" style="position: relative; top: 5px; right: -8px;"
+                        ngbTooltip="Textvorlage löschen" container="body" class="icofont-minus-circle text-danger f-right pointer"></i>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

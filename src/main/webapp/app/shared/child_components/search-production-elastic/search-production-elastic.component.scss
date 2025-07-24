@@ -1,0 +1,14 @@
+.greyhover-result {
+  padding: 20px 20px 20px 20px;
+}
+
+.greyhover:hover,
+.greyhover-result:hover {
+  background-color: #eaeaea;
+}
+
+.betriebinsearch:hover {
+  color: #f28d35;
+  text-decoration: underline;
+  cursor: pointer;
+}

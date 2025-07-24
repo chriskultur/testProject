@@ -1,0 +1,35 @@
+<!-- Page-header start -->
+<div class="" *ngFor="let breadcrumb of breadcrumbs; let last = last">
+    <div class="page-header card" *ngIf="breadcrumb.status && last">
+        <div class="row align-items-end" *ngIf="last">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <span *ngFor="let breadcrumb of breadcrumbs; let last = last"><i class="icofont {{ breadcrumb.icon }}" *ngIf="last"></i></span>
+                    <div class="d-inline">
+                      <span class="d-block" *ngFor="let breadcrumb of breadcrumbs; let last = last"><h4 style="text-transform: none;" *ngIf="last">{{ breadcrumb.label }}</h4></span>
+                        <span style="text-transform: none; font-size: 14px;">{{breadcrumb.text}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="row justify-content-end"   >
+                <img class="col-lg-6" style="width: 30%" src="{{breadcrumb.image}}">
+              </div>
+              <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item">
+                            <a [routerLink]="'/'">
+                                <i class="icofont icofont-home"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item" *ngFor="let breadcrumb of breadcrumbs;">
+
+                            <a [ngClass]="breadcrumb.status === false ? 'not-active': ''" >{{breadcrumb.label}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-header end -->

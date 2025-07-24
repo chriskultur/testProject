@@ -1,0 +1,149 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  position: absolute;
+  background-color: #fff;
+  width: 100%;
+  overflow-y: auto;
+  height: 465px;
+  border: 1px solid #ddd;
+  z-index: 100000;
+  overflow-x: hidden !important;
+  box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+  a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1600px) {
+  .dropdown-content {
+    position: relative;
+    background-color: #fff;
+    width: 500px;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+    height: 465px;
+    border: 1px solid #ddd;
+    z-index: 100000;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .dropdown-content {
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+    height: 465px;
+    border: 1px solid #ddd;
+    z-index: 100000;
+  }
+}
+
+.iconcircle-search {
+  font-size: 14px;
+  background-color: #f28d35;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-betrieb {
+  font-size: 14px;
+  background-color: #6fb3ef;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-artist {
+  font-size: 14px;
+  background-color: #92bebe;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-prod {
+  font-size: 14px;
+  background-color: #ffb64d;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-werk {
+  font-size: 14px;
+  background-color: #ab7967;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-spiel {
+  font-size: 14px;
+  background-color: #4c4c4c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-user {
+  font-size: 14px;
+  background-color: #99c25c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.iconcircle-kb {
+  font-size: 14px;
+  background-color: #ef7474;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.greyhover {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.greyhover-result {
+  padding: 15px 20px 15px 5px;
+}
+
+.greyhover:hover,
+.greyhover-result:hover {
+  background-color: #eaeaea;
+}
+
+.tagbutton-globalsearch {
+  margin: 3px;
+  color: white;
+  cursor: pointer;
+  padding: 3px;
+  background-color: #8c8c8c;
+  border: 0.5px solid;
+  border-color: #424242;
+  border-radius: 3px;
+  font-size: 11px;
+
+  &:hover {
+    background-color: #f28d35;
+    border-color: #f28d35;
+  }
+}
+
+.betriebinsearch:hover {
+  color: #f28d35;
+  text-decoration: underline;
+  cursor: pointer;
+}

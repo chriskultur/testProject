@@ -1,0 +1,78 @@
+.iconcircle-betrieb {
+  font-size: 14px;
+  background-color: #6fb3ef;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.dropdown-content {
+  position: absolute;
+  background-color: #fff;
+  width: calc(100% - 2em);
+  overflow-y: auto;
+  overflow-x: hidden !important;
+  height: 330px;
+  border: 1px solid #ddd;
+  z-index: 100000;
+}
+
+@media only screen and (max-width: 1020px) {
+  .dropdown-content {
+    position: absolute;
+    background-color: #fff;
+    width: 88%;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+    height: 330px;
+    border: 1px solid #ddd;
+    z-index: 100000;
+  }
+}
+.iconcircle-artist {
+  font-size: 14px;
+  background-color: #92bebe;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.greyhover-result {
+  padding: 15px 20px 15px 5px;
+}
+
+.greyhover-result:hover {
+  background-color: #eaeaea;
+}
+
+.tagbutton-globalsearch {
+  margin: 3px;
+  color: white;
+  cursor: pointer;
+  padding: 3px;
+  background-color: #8c8c8c;
+  border: 0.5px solid;
+  border-color: #424242;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.tagbutton-globalsearch:hover {
+  background-color: #f28d35;
+  border-color: #f28d35;
+}
+
+.companyNotInserted {
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 2px;
+  border: 1px solid #cccccc;
+  border-left: 4px solid #9a0f14 !important;
+}

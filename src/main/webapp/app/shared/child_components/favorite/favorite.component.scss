@@ -1,0 +1,29 @@
+starstate1 {
+  font-size: 24px !important;
+  color: grey !important;
+}
+
+.star1 {
+  font-size: 25px;
+  padding: 5px;
+  top: 0px;
+  cursor: pointer;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  box-shadow: 1px 1px 9px 4px #ececec;
+}
+
+.star1:hover {
+  color: #f28d35;
+}
+
+.star2 {
+  font-size: 25px;
+  padding: 5px;
+  top: 0px;
+  color: #93be52;
+  cursor: pointer;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  box-shadow: 1px 1px 9px 4px #ececec;
+}

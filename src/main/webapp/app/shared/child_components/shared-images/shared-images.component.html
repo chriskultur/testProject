@@ -1,0 +1,71 @@
+<div *ngIf="isLoading">
+    <app-spinnerOverlay></app-spinnerOverlay>
+</div>
+<ng-template #content let-c="close" let-d="dismiss" class="image-cropper">
+    <image-cropper [imageFile]="fileBlob" [maintainAspectRatio]="true"
+                   [aspectRatio]="3 / 3" [roundCropper]="true" [resizeToWidth]="300" format="png"
+        (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" output="base64" (loadImageFailed)="loadImageFailed()"
+        class="image-cropper"></image-cropper>
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)=" base64Converter(); d('Cross click');">Bild
+        zuschneiden
+    </button>
+</ng-template>
+
+<ng-template #signcropper let-c="close" let-d="dismiss" class="image-cropper">
+    <image-cropper [imageFile]="fileBlob" [maintainAspectRatio]="false"
+       [aspectRatio]="1 / 1" [roundCropper]="false" [resizeToWidth]="300" format="png"
+        (imageCropped)="imageCropped($event)" output="base64" (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()"
+        class="image-cropper"></image-cropper>
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)=" base64Converter(); d('Cross click');">Bild
+        zuschneiden
+    </button>
+</ng-template>
+
+<div class="imgupload">
+    <div *ngIf="typeofmitarbeiter == 'leiter' ||  typeofmitarbeiter == 'mitarbeiter'">
+        <img class="profilepic" *ngIf="!Mitimage.bild" src="../../../assets/images/Portrait_Placeholder.png" alt="Platzhalter">
+        <img class="profilepic" *ngIf="Mitimage.bild" name="showImage{{j}}{{typeofmitarbeiter}}"
+            id="MitarbeitershowImage{{j}}{{typeofmitarbeiter}}"
+            [src]="'data:' + Mitimage?.bildContentType + ';base64,' + Mitimage?.bild | safe" alt="bp image" />
+        <div class="showonhover">
+            <label for="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}" class="uploadbutton">Datei auswählen</label>
+            <input id="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}"
+                name="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}" class="hide" type="file"
+                onclick="this.value=null"
+                (change)="selectFile($event,$event, Mitimage, 'bild', true, content);">
+            <input type="hidden" class="form-control" name="Mitarbeiterimage{{j}}{{typeofmitarbeiter}}"
+                id="field_bildMitarbeiter{{j}}{{typeofmitarbeiter}}" [(ngModel)]="Mitimage.bild" />
+            <input type="hidden" class="form-control" name="MitarbeiterContentType{{j}}{{typeofmitarbeiter}}"
+                [(ngModel)]="Mitimage.bildContentType"
+                id="Mitarbeiterfield_bildContentType{{j}}{{typeofmitarbeiter}}" />
+        </div>
+    </div>
+    <div *ngIf="typeofmitarbeiter == 'leiterSign' ||  typeofmitarbeiter == 'mitarbeiterSign'">
+        <!-- <img class="signpic" *ngIf="!Mitimage.bild" src="../../../assets/images/placeholder_betrieb.jpg" alt="Platzhalter"> -->
+        <!-- <div *ngIf="!Mitimage.bild" class="signpicdiv">
+            Unterschrift
+        </div> -->
+        <img class="signpic" *ngIf="Mitimage.bild" name="showImage{{j}}{{typeofmitarbeiter}}"
+            id="MitarbeitershowImage{{j}}{{typeofmitarbeiter}}"
+            [src]="'data:' + Mitimage?.bildContentType + ';base64,' + Mitimage?.bild | safe" alt="bp image" />
+            <label for="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}" class="choosesign">Datei auswählen</label>
+            <input id="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}"
+                name="MitarbeiterImageUpload{{j}}{{typeofmitarbeiter}}" class="hide" type="file"
+                onclick="this.value=null"
+                (change)="selectFile($event,$event, Mitimage, 'bild', true, signcropper);">
+            <input type="hidden" class="form-control" name="Mitarbeiterimage{{j}}{{typeofmitarbeiter}}"
+                id="field_bildMitarbeiter{{j}}{{typeofmitarbeiter}}" [(ngModel)]="Mitimage.bild" />
+            <input type="hidden" class="form-control" name="MitarbeiterContentType{{j}}{{typeofmitarbeiter}}"
+                [(ngModel)]="Mitimage.bildContentType"
+                id="Mitarbeiterfield_bildContentType{{j}}{{typeofmitarbeiter}}" />
+    </div>
+</div>
+<i *ngIf="Mitimage.bild" class="deletepic icofont-minus-circle text-danger" ngbTooltip="Bild entfernen" container="body" (click)="removeImage();"></i>
+<div class="file-upload">
+    <div *ngIf="imageFormatCheck" class="alert alert-danger">
+        <div>Dieses Dateiformat wird nicht unterstützt. Bitte wählen Sie eine JPG, PNG, GIF oder BMP Datei.</div>
+    </div>
+    <div *ngIf="imageSizeCheck" class="alert alert-danger">
+        <div>Bitte laden Sie Bilder mit einer Größe von maximal 10 MB hoch</div>
+    </div>
+</div>

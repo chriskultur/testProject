@@ -1,0 +1,9 @@
+<div *ngIf="!isFavorite" ngbTooltip="Als Favorit speichern" placement="left" container="body">
+    <i (click)="onClick()" class="icofont icofont-star" [class.star1]="!isFavorite" [class.star2]="isFavorite"></i>
+</div>
+
+<div *ngIf="isFavorite" ngbTooltip="Als Favorit gespeichert" placement="left">
+    <i (click)="onClick()" class="icofont icofont-star" [class.star1]="!isFavorite" [class.star2]="isFavorite"></i>
+</div>
+
+<app-toasts style="z-index:10000;" ></app-toasts>
