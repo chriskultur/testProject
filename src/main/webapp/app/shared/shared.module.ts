@@ -211,6 +211,7 @@ export class TruncatePipe implements PipeTransform {
   exports: [
     TabContainerComponent,
     ContractTableComponent,
+    RouterModule,
     ProductMediaMp3ViewComponent,
     ProductMediaMp3Component,
     MediaGalleryComponent,
